@@ -12,6 +12,19 @@
     return document.querySelector('[class*="NotificationsHeader-sc-rqbw39"]');
   }
 
+  function isUnread(item) {
+    // The blue dot is a ReadButton div — when unread it has a visible background
+    const dot = item.querySelector('[class*="ReadButton-sc-bymlbk"]');
+    if (!dot) return false;
+    const style = window.getComputedStyle(dot);
+    // Unread dots have a solid background color; read ones are transparent/hidden
+    const bg = style.backgroundColor;
+    const visible =
+      bg && bg !== "transparent" && bg !== "rgba(0, 0, 0, 0)";
+    // Also check if the dot is actually displayed
+    return visible && style.display !== "none" && style.visibility !== "hidden";
+  }
+
   function getNotificationLinks(container) {
     // Each notification is a NotificationItem div containing an <a> with the href
     const items = container.querySelectorAll('[class*="NotificationItem-sc-bymlbk"]');
@@ -23,6 +36,8 @@
       const text = item.textContent || "";
       // Skip notifications from (following) or (admin) users
       if (SKIP.some((tag) => text.includes(tag))) return;
+      // Skip already-read notifications
+      if (!isUnread(item)) return;
 
       const link = item.querySelector("a[href]");
       if (link && link.href && !seen.has(link.href)) {
