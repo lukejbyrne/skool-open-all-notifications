@@ -1,31 +1,55 @@
-# Skool – Open All Notifications
+# Skool — Open All Notifications
 
 A Chrome extension that adds an **"Open All"** button to your Skool notification dropdown. One click opens every notification in a new tab and marks them all as read.
 
-![Chrome Web Store](https://img.shields.io/badge/platform-Chrome-4285F4?logo=googlechrome&logoColor=white)
+![Chrome](https://img.shields.io/badge/Chrome-Extension-4285F4?logo=googlechrome&logoColor=white) ![Vanilla JS](https://img.shields.io/badge/Vanilla-JS-F7DF1E?logo=javascript&logoColor=black) ![Zero Deps](https://img.shields.io/badge/Dependencies-Zero-333)
 
 ## Features
 
-- Opens all community member notifications in new tabs with one click
-- Automatically marks all notifications as read
-- Filters out noise — skips `(following)` and `(admin)` notifications
-- Lightweight — no permissions required, runs only on skool.com
+- One-click opens all unread notifications in new tabs
+- Automatically marks all as read
+- Filters out (following) and (admin) noise
+- No special permissions required
+- Lightweight — runs only on skool.com
+- Purple button styled to match Skool's UI
 
-## Install from source
+## Quick Start
 
-1. Clone or download this repo
-2. Open `chrome://extensions` in Chrome
-3. Enable **Developer mode** (top right)
-4. Click **Load unpacked** and select the repo folder
+```bash
+git clone https://github.com/lukejbyrne/skool-open-all-notifications.git
+```
 
-## How it works
+1. Open `chrome://extensions`
+2. Toggle **Developer mode** on (top right)
+3. Click **Load unpacked** → select the folder
+4. Go to [skool.com](https://www.skool.com) → click the notification bell
+5. Click **"Open All"**
 
-When you click the notification bell on Skool, the extension injects an **"Open All"** button next to "Mark all as read". Clicking it:
+## How It Works
 
-1. Collects all notification links (excluding following/admin posts)
-2. Opens each one in a new tab
-3. Clicks "Mark all as read" automatically
+Just 3 files:
 
-## Privacy
+| File | Purpose |
+|------|---------|
+| `manifest.json` | Extension config — name, permissions, target sites |
+| `content.js` | Main logic — finds notifications, injects button, opens tabs |
+| `background.js` | Controls when the extension icon is active |
 
-This extension does not collect, store, or transmit any user data. See [PRIVACY.md](PRIVACY.md).
+## Modify With Claude Code
+
+- `"Make this work on LinkedIn notifications instead"`
+- `"Add a keyboard shortcut (Ctrl+Shift+O)"`
+- `"Add a counter badge showing unread count"`
+- `"Only open notifications from the last 24 hours"`
+
+See [LESSON.md](LESSON.md) for the full customization guide.
+
+## Publish to Chrome Web Store
+
+1. Zip the folder
+2. Go to the [Chrome Developer Dashboard](https://chrome.google.com/webstore/devconsole)
+3. Pay one-time $5 fee → upload → submit for review
+
+## Part of Build with Luke
+
+This is one of 22 apps inside [Build with Luke](https://www.skool.com/luke). Clone it, customize it, ship it.
