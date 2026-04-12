@@ -5,7 +5,7 @@ chrome.runtime.onInstalled.addListener(() => {
       {
         conditions: [
           new chrome.declarativeContent.PageStateMatcher({
-            pageUrlFilters: [{ hostEquals: "www.skool.com" }],
+            pageUrl: { hostEquals: "www.skool.com" },
           }),
         ],
         actions: [new chrome.declarativeContent.ShowAction()],

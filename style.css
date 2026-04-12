@@ -1,5 +1,5 @@
-#skool-open-all-btn {
-  background: #4f46e5;
+#skool-open-all-btn,
+#skool-mark-tagged-read-btn {
   color: #fff;
   border: none;
   border-radius: 6px;
@@ -12,6 +12,18 @@
   white-space: nowrap;
 }
 
+#skool-open-all-btn {
+  background: #4f46e5;
+}
+
 #skool-open-all-btn:hover {
   background: #4338ca;
+}
+
+#skool-mark-tagged-read-btn {
+  background: #dc2626;
+}
+
+#skool-mark-tagged-read-btn:hover {
+  background: #b91c1c;
 }

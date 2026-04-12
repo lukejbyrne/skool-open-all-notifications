@@ -1,17 +1,16 @@
-# Skool — Open All Notifications
+# Skool Notification Helper
 
-A Chrome extension that adds an **"Open All"** button to your Skool notification dropdown. One click opens every notification in a new tab and marks them all as read.
+A Chrome extension that adds **"Open All"** and **"Clear Out"** buttons to your Skool notification dropdown. Open every real notification in one click, and clear out the `(following)` / `(admin)` noise without losing the rest.
 
 ![Chrome](https://img.shields.io/badge/Chrome-Extension-4285F4?logo=googlechrome&logoColor=white) ![Vanilla JS](https://img.shields.io/badge/Vanilla-JS-F7DF1E?logo=javascript&logoColor=black) ![Zero Deps](https://img.shields.io/badge/Dependencies-Zero-333)
 
 ## Features
 
-- One-click opens all unread notifications in new tabs
-- Automatically marks all as read
-- Filters out (following) and (admin) noise
-- No special permissions required
+- **Open All** — opens every unread notification in new tabs and marks them read, skipping `(following)` and `(admin)`
+- **Clear Out** — marks only the `(following)` and `(admin)` notifications as read, leaving the rest alone
+- Dedupes multiple comments on the same post into a single tab
 - Lightweight — runs only on skool.com
-- Purple button styled to match Skool's UI
+- Buttons styled to match Skool's UI
 
 ## Quick Start
 

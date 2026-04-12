@@ -1,6 +1,8 @@
 (() => {
   const BUTTON_ID = "skool-open-all-btn";
+  const MARK_BUTTON_ID = "skool-mark-tagged-read-btn";
   const POLL_MS = 500;
+  const TAGS = ["(following)", "(admin)"];
 
   function getNotificationDropdown() {
     // The notification list lives inside a PopoverItems container
@@ -30,22 +32,40 @@
     const items = container.querySelectorAll('[class*="NotificationItem-sc-bymlbk"]');
     const seen = new Set();
     const results = [];
-    const SKIP = ["(following)", "(admin)"];
 
     items.forEach((item) => {
       const text = item.textContent || "";
       // Skip notifications from (following) or (admin) users
-      if (SKIP.some((tag) => text.includes(tag))) return;
+      if (TAGS.some((tag) => text.includes(tag))) return;
       // Skip already-read notifications
       if (!isUnread(item)) return;
 
       const link = item.querySelector("a[href]");
-      if (link && link.href && !seen.has(link.href)) {
-        seen.add(link.href);
-        results.push(link.href);
-      }
+      if (!link || !link.href) return;
+      let key = link.href;
+      try {
+        const u = new URL(link.href);
+        u.search = "";
+        u.hash = "";
+        key = u.toString();
+      } catch (_) {}
+      if (seen.has(key)) return;
+      seen.add(key);
+      results.push(link.href);
     });
 
+    return results;
+  }
+
+  function getTaggedUnreadItems(container) {
+    const items = container.querySelectorAll('[class*="NotificationItem-sc-bymlbk"]');
+    const results = [];
+    items.forEach((item) => {
+      const text = item.textContent || "";
+      if (!TAGS.some((tag) => text.includes(tag))) return;
+      if (!isUnread(item)) return;
+      results.push(item);
+    });
     return results;
   }
 
@@ -62,6 +82,34 @@
 
     // Already injected
     if (document.getElementById(BUTTON_ID)) return;
+
+    const markBtn = document.createElement("button");
+    markBtn.id = MARK_BUTTON_ID;
+    markBtn.textContent = "Clear Out";
+    markBtn.title = "Mark (admin) and (following) notifications as read";
+    markBtn.addEventListener("click", async (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const initial = getTaggedUnreadItems(list);
+      if (initial.length === 0) {
+        markBtn.textContent = "Nothing to mark";
+        setTimeout(() => (markBtn.textContent = "Clear Out"), 2000);
+        return;
+      }
+      let marked = 0;
+      const max = initial.length + 5;
+      for (let i = 0; i < max; i++) {
+        const remaining = getTaggedUnreadItems(list);
+        if (remaining.length === 0) break;
+        const dot = remaining[0].querySelector('[class*="ReadButton-sc-bymlbk"]');
+        if (!dot) break;
+        dot.click();
+        marked++;
+        await new Promise((r) => setTimeout(r, 150));
+      }
+      markBtn.textContent = `Marked ${marked}`;
+      setTimeout(() => (markBtn.textContent = "Clear Out"), 2000);
+    });
 
     const btn = document.createElement("button");
     btn.id = BUTTON_ID;
@@ -98,9 +146,10 @@
         btn,
         markAll.parentElement.nextSibling
       );
+      markAll.parentElement.parentElement.insertBefore(markBtn, btn.nextSibling);
     } else {
-      // Fallback: insert after the header text
       header.parentElement.insertBefore(btn, header.nextSibling);
+      header.parentElement.insertBefore(markBtn, btn.nextSibling);
     }
   }
 
