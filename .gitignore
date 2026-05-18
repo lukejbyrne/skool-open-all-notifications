@@ -12,5 +12,8 @@ Thumbs.db
 # Logs
 *.log
 
+# Chrome Web Store packages
+*.zip
+
 # Chrome Web Store screenshots
 store-*.png

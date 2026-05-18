@@ -2,7 +2,7 @@
   const BUTTON_ID = "skool-open-all-btn";
   const MARK_BUTTON_ID = "skool-mark-tagged-read-btn";
   const POLL_MS = 500;
-  const TAGS = ["(following)", "(admin)"];
+  const TAGS = ["(following)", "(admin)", "(broadcast)"];
 
   function getNotificationDropdown() {
     // The notification list lives inside a PopoverItems container
@@ -35,8 +35,8 @@
 
     items.forEach((item) => {
       const text = item.textContent || "";
-      // Skip notifications from (following) or (admin) users
-      if (TAGS.some((tag) => text.includes(tag))) return;
+      // Skip notifications from tagged Skool system/group labels
+      if (TAGS.some((tag) => text.toLowerCase().includes(tag))) return;
       // Skip already-read notifications
       if (!isUnread(item)) return;
 
@@ -62,7 +62,7 @@
     const results = [];
     items.forEach((item) => {
       const text = item.textContent || "";
-      if (!TAGS.some((tag) => text.includes(tag))) return;
+      if (!TAGS.some((tag) => text.toLowerCase().includes(tag))) return;
       if (!isUnread(item)) return;
       results.push(item);
     });
@@ -86,7 +86,7 @@
     const markBtn = document.createElement("button");
     markBtn.id = MARK_BUTTON_ID;
     markBtn.textContent = "Clear Out";
-    markBtn.title = "Mark (admin) and (following) notifications as read";
+    markBtn.title = "Mark (admin), (broadcast), and (following) notifications as read";
     markBtn.addEventListener("click", async (e) => {
       e.preventDefault();
       e.stopPropagation();

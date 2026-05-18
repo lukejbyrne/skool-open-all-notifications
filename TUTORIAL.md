@@ -12,7 +12,6 @@ Create a folder for your extension. You only need a few files:
 skool-open-all-notifications/
 ├── manifest.json      ← tells Chrome what your extension does
 ├── content.js         ← the actual logic (injected into web pages)
-├── background.js      ← controls the toolbar icon
 ├── style.css          ← styles for the injected button
 ├── icon16.png         ← toolbar icon
 ├── icon48.png         ← extension management page icon
@@ -29,7 +28,6 @@ This is the config file Chrome reads to understand your extension. Every extensi
   "name": "Skool – Open All Notifications",
   "version": "1.1",
   "description": "Opens every Skool notification in a new tab with one click.",
-  "permissions": ["activeTab", "declarativeContent"],
   "action": {
     "default_icon": {
       "48": "icon48.png",
@@ -47,9 +45,6 @@ This is the config file Chrome reads to understand your extension. Every extensi
   "icons": {
     "48": "icon48.png",
     "128": "icon128.png"
-  },
-  "background": {
-    "service_worker": "background.js"
   }
 }
 ```
@@ -58,8 +53,7 @@ Key things to understand:
 - **manifest_version: 3** — always use v3, v2 is deprecated
 - **content_scripts** — code that gets injected into matching web pages
 - **matches** — which URLs your extension runs on (only skool.com for us)
-- **permissions** — what your extension is allowed to do
-- **background service_worker** — runs in the background to control things like the toolbar icon
+- No broad permissions are needed because the content script only runs on Skool
 
 ## Part 3: The Content Script (content.js)
 
@@ -88,7 +82,7 @@ The blue dot next to each notification has a background color when unread and is
 
 ### Step 3: Filter out noise
 
-We skip notifications containing "(following)" or "(admin)" in the text since those are from people you follow or group admins — not direct community engagement.
+We skip notifications containing "(following)", "(admin)", or "(broadcast)" in the text since those are from people you follow, group admins, or broadcast posts -- not direct community engagement.
 
 ### Step 4: Open all and mark as read
 
@@ -123,7 +117,7 @@ Collect all unread notification links, open each in a new tab with `window.open(
     const items = container.querySelectorAll('[class*="NotificationItem-sc-bymlbk"]');
     const seen = new Set();
     const results = [];
-    const SKIP = ["(following)", "(admin)"];
+    const SKIP = ["(following)", "(admin)", "(broadcast)"];
 
     items.forEach((item) => {
       const text = item.textContent || "";
@@ -196,28 +190,7 @@ Collect all unread notification links, open each in a new tab with `window.open(
 })();
 ```
 
-## Part 4: Background Script (background.js)
-
-This controls when the toolbar icon is active vs greyed out. We only want it lit up on skool.com.
-
-```javascript
-chrome.runtime.onInstalled.addListener(() => {
-  chrome.declarativeContent.onPageChanged.removeRules(undefined, () => {
-    chrome.declarativeContent.onPageChanged.addRules([
-      {
-        conditions: [
-          new chrome.declarativeContent.PageStateMatcher({
-            pageUrlFilters: [{ hostEquals: "www.skool.com" }],
-          }),
-        ],
-        actions: [new chrome.declarativeContent.ShowAction()],
-      },
-    ]);
-  });
-});
-```
-
-## Part 5: Styling (style.css)
+## Part 4: Styling (style.css)
 
 Keep it simple and matching the Skool UI:
 
@@ -281,10 +254,8 @@ Every time you change code, hit the refresh icon on the extension card in `chrom
 
 ### 4. Privacy section
 - **Single purpose description** — one clear sentence about what the extension does
-- **Permission justifications** — explain why you need each permission
-  - `activeTab` — to detect when user is on skool.com
-  - `declarativeContent` — to show/hide toolbar icon based on current site
-  - Host permissions — content script needs to run on skool.com to inject the button
+- **Permission justifications** — no broad Chrome permissions are requested
+- **Site access justification** — content script access to `https://www.skool.com/*` is needed to add the notification buttons to Skool pages
 - **Remote code** — select "No" (all code is in the package)
 - **Data usage** — check nothing (we collect zero data)
 - **Certify all three privacy disclosures**
@@ -304,4 +275,4 @@ Every time you change code, hit the refresh icon on the extension card in `chrom
 - **Use `class*=` selectors** for styled-components sites where class names have random hashes — match on the stable part of the name
 - **MutationObserver + polling** is the most reliable pattern for SPAs
 - **Keep permissions minimal** — fewer permissions = faster review and more user trust
-- **Write a privacy policy** even for simple extensions — it's required if you declare any permissions
+- **Write a privacy policy** even for simple extensions — it keeps the review process clear

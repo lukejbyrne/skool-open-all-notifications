@@ -1,9 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Skool Notification Helper",
-  "version": "1.2",
+  "version": "1.5",
   "description": "Adds Open All and Clear Out buttons to the Skool notification dropdown.",
-  "permissions": ["declarativeContent"],
   "action": {
     "default_icon": {
       "48": "icon48.png",
@@ -21,8 +20,5 @@
   "icons": {
     "48": "icon48.png",
     "128": "icon128.png"
-  },
-  "background": {
-    "service_worker": "background.js"
   }
 }

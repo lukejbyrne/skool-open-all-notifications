@@ -10,7 +10,7 @@ A Chrome extension that adds an "Open All" button to the Skool notification drop
 
 - One-click open all unread notifications
 - Auto marks everything as read
-- Filters out (following) and (admin) noise
+- Filters out (following), (admin), and (broadcast) noise
 - Lightweight -- no special permissions, runs only on skool.com
 - Styled purple button injected right next to "Mark all as read"
 
@@ -51,12 +51,6 @@ In `manifest.json`, update the `matches` array to target a different site:
 ]
 ```
 
-Also update `background.js` to change which site lights up the extension icon:
-
-```js
-pageUrlFilters: [{ hostEquals: "www.example.com" }],
-```
-
 ### Change the button style
 
 Edit `style.css` to change colors, size, or shape:
@@ -74,7 +68,7 @@ Edit `style.css` to change colors, size, or shape:
 In `content.js`, find the `SKIP` array:
 
 ```js
-const SKIP = ["(following)", "(admin)"];
+const SKIP = ["(following)", "(admin)", "(broadcast)"];
 ```
 
 Add or remove tags to filter different notification types.
@@ -83,10 +77,9 @@ Add or remove tags to filter different notification types.
 
 | File | What it does |
 |------|-------------|
-| `manifest.json` | Extension config -- name, permissions, which sites to run on |
+| `manifest.json` | Extension config -- name and which sites to run on |
 | `content.js` | Main logic -- finds notifications, injects the button, opens tabs |
 | `style.css` | Button styling |
-| `background.js` | Controls when the extension icon is active |
 
 ---
 

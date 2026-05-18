@@ -1,13 +1,13 @@
 # Skool Notification Helper
 
-A Chrome extension that adds **"Open All"** and **"Clear Out"** buttons to your Skool notification dropdown. Open every real notification in one click, and clear out the `(following)` / `(admin)` noise without losing the rest.
+A Chrome extension that adds **"Open All"** and **"Clear Out"** buttons to your Skool notification dropdown. Open every real notification in one click, and clear out the `(following)` / `(admin)` / `(broadcast)` noise without losing the rest.
 
 ![Chrome](https://img.shields.io/badge/Chrome-Extension-4285F4?logo=googlechrome&logoColor=white) ![Vanilla JS](https://img.shields.io/badge/Vanilla-JS-F7DF1E?logo=javascript&logoColor=black) ![Zero Deps](https://img.shields.io/badge/Dependencies-Zero-333)
 
 ## Features
 
-- **Open All** — opens every unread notification in new tabs and marks them read, skipping `(following)` and `(admin)`
-- **Clear Out** — marks only the `(following)` and `(admin)` notifications as read, leaving the rest alone
+- **Open All** — opens every unread notification in new tabs and marks them read, skipping `(following)`, `(admin)`, and `(broadcast)`
+- **Clear Out** — marks only the `(following)`, `(admin)`, and `(broadcast)` notifications as read, leaving the rest alone
 - Dedupes multiple comments on the same post into a single tab
 - Lightweight — runs only on skool.com
 - Buttons styled to match Skool's UI
@@ -30,9 +30,9 @@ Just 3 files:
 
 | File | Purpose |
 |------|---------|
-| `manifest.json` | Extension config — name, permissions, target sites |
+| `manifest.json` | Extension config — name and target site |
 | `content.js` | Main logic — finds notifications, injects button, opens tabs |
-| `background.js` | Controls when the extension icon is active |
+| `style.css` | Button styling |
 
 ## Modify With Claude Code
 
